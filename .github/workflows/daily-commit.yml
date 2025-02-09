@@ -2,9 +2,8 @@ name: Daily Commit Automation
 
 on:
   schedule:
-    # Runs every day at 2 AM UTC (adjust as needed)
-    - cron: '0 2 * * *'
-  workflow_dispatch:  # Allows manual triggering
+    - cron: '0 2 * * *'  # Runs daily at 2 AM UTC
+  workflow_dispatch:
 
 jobs:
   daily-commit:
@@ -21,4 +20,9 @@ jobs:
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git add last_updated.txt
           git commit -m "Automated update: $(date)"
-          git push
+          
+      - name: Push Changes
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_PAT }}  # Use the secret token
+        run: |
+          git push https://x-access-token:${{ secrets.GH_PAT }}@github.com/MonishaMohan34/task-4.git main
